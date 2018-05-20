@@ -10,6 +10,7 @@ public class Client {
     private String name;
     private Date birthday;
     private long phoneNumber;
+    private int priorityLevel;
 
     public Client() {
         this.id = id;
@@ -18,6 +19,7 @@ public class Client {
         this.name = name;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
+        this.priorityLevel = priorityLevel;
     }
 
     public int getId() {
@@ -66,5 +68,13 @@ public class Client {
 
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getPriorityLevel() {
+        return priorityLevel;
+    }
+
+    public void setPriorityLevel(int priorityLevel) {
+        this.priorityLevel = priorityLevel;
     }
 }

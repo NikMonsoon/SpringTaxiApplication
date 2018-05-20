@@ -81,6 +81,18 @@ public class SqlClientDao {
         return client;
     }
 
+    public int getPriorityLevelById(int id) throws SQLException {
+        String sql = "SELECT * FROM Client WHERE ID = ?";
+
+        connection = DriverManager.getConnection(url, name, password);
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, id);
+
+        Client client = fillingClient(statement);
+        int priorityLevel = client.getPriorityLevel();
+        return priorityLevel;
+    }
+
     public List<Client> getAll() throws SQLException {
         String sql = "SELECT * FROM Client";
 
@@ -91,8 +103,8 @@ public class SqlClientDao {
         return clients;
     }
 
-    public void create(String login, String password, String name, Date birthday, long phoneNumber) {
-        String sql = "INSERT INTO Client (Login, Password, Name, BornDate, PhoneNumber) VALUES (?,?,?,?,?)";
+    public void create(String login, String password, String name, Date birthday, long phoneNumber, int priorityLevel) {
+        String sql = "INSERT INTO Client (Login, Password, Name, BornDate, PhoneNumber, priorityLevel) VALUES (?,?,?,?,?,?)";
 
         try {
             connection = DriverManager.getConnection(url, this.name, this.password);
@@ -102,6 +114,7 @@ public class SqlClientDao {
             statement.setString(3, name);
             statement.setDate(4, birthday);
             statement.setLong(5, phoneNumber);
+            statement.setInt(6, priorityLevel);
             statement.executeUpdate();
             statement.close();
 
@@ -127,8 +140,8 @@ public class SqlClientDao {
         }
     }
 
-    public void update(int id, String login, String password, String name, Date birthday, long phoneNumber) {
-        String sql = "UPDATE Client SET Login = ?, Password = ?, Name = ?, BornDate = ?, PhoneNumber = ? WHERE ID = ?";
+    public void update(int id, String login, String password, String name, Date birthday, long phoneNumber, int priorityLevel) {
+        String sql = "UPDATE Client SET Login = ?, Password = ?, Name = ?, BornDate = ?, PhoneNumber = ?, PriorityLevel = ? WHERE ID = ?";
 
         try {
             connection = DriverManager.getConnection(url, this.name, this.password);
@@ -138,7 +151,8 @@ public class SqlClientDao {
             statement.setString(3, name);
             statement.setDate(4, birthday);
             statement.setLong(5, phoneNumber);
-            statement.setInt(6, id);
+            statement.setInt(6, priorityLevel);
+            statement.setInt(7, id);
             statement.executeUpdate();
             statement.close();
 
@@ -159,6 +173,7 @@ public class SqlClientDao {
             client.setName(result.getString("Name"));
             client.setBirthday(result.getDate("BornDate"));
             client.setPhoneNumber(result.getLong("PhoneNumber"));
+            client.setPriorityLevel(result.getInt("PriorityLevel"));
         }
         connection.close();
         return client;
@@ -175,7 +190,8 @@ public class SqlClientDao {
             client.setPassword(result.getString("Password"));
             client.setName(result.getString("Name"));
             client.setBirthday(result.getDate("BornDate"));
-            client.setPhoneNumber(result.getInt("PhoneNumber"));
+            client.setPhoneNumber(result.getLong("PhoneNumber"));
+            client.setPriorityLevel(result.getInt("PriorityLevel"));
             clients.add(client);
         }
         connection.close();

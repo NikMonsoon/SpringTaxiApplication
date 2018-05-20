@@ -14,7 +14,7 @@
     </head>
     <h2 align="center">Personal Area</h2>
     <body>
-        <form:form action="personalData">
+        <form:form action="personalArea">
             <table align="center">
                 <tr>
                     <td align="right">Welcome,</td>

@@ -33,7 +33,7 @@
             <td><form:input path="payment"/></td>
         </tr>
         <tr>
-            <td><button type="submit" formmethod="post" style="width: 95px"/>Back</td>
+            <td><button type="submit" formmethod="post" formaction="personalArea" style="width: 95px"/>Back</td>
             <td><input type="submit" value="Enter" formmethod="post" style="width: 175px"/></td>
         </tr>
     </table>
