@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="OracleDBDriver">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/OracleDBDriver.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
