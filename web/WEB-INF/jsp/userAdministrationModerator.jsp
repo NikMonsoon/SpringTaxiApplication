@@ -16,13 +16,11 @@
 <body>
 <form:form action="userAdministrationSuperUser">
     <table align="center">
-        <td colspan="3" align="center"><table border="1">
+        <td align="center"><table border="1">
                 ${tableData}
         </table></td>
         <tr>
-            <td align="center"><button type="submit" formmethod="get" formaction="personalAreaSuperUser" style="width: 150px"/>Back</td>
-            <td align="center"><button type="submit" formmethod="post" formaction="userDelete" style="width: 150px"/>Delete User</td>
-            <td align="center"><button type="submit" formmethod="get" formaction="userRegistrationSuperUser" style="width: 150px"/>Add User</td>
+            <td align="center"><button type="submit" formmethod="get" formaction="personalAreaModerator" style="width: 150px"/>Back</td>
     </table>
 </form:form>
 </body>

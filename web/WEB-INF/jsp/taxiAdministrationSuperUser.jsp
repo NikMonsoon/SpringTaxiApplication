@@ -23,8 +23,8 @@
         </tr>
         <tr>
             <td align="center"><button type="submit" formmethod="get" formaction="personalAreaSuperUser" style="width: 150px"/>Back</td>
-            <td align="center"><button type="submit" formmethod="get" formaction="callDelete" style="width: 150px"/>Delete Car</td>
-            <td align="center"><button type="submit" formmethod="get" formaction="callAdd" style="width: 150px"/>Add Car</td>
+            <td align="center"><button type="submit" formmethod="post" formaction="taxiDelete" style="width: 150px"/>Delete Car</td>
+            <td align="center"><button type="submit" formmethod="get" formaction="taxiRegistrationSuperUser" style="width: 150px"/>Add Car</td>
         </tr>
     </table>
 </form:form>

@@ -76,6 +76,7 @@ public class SqlTaxiDao {
 
         connection = DriverManager.getConnection(url, name, password);
         PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, carNumber);
 
         Taxi taxi = fillingTaxi(statement);
         return taxi;

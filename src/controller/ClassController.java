@@ -126,14 +126,20 @@ public class ClassController {
             currentClient = client;
             return new ModelAndView("personalArea");
         } else {
-            System.out.println("Something is realy Wrong!");
+            System.out.println("Something is Wrong!");
             return new ModelAndView("settings", "command", currentClient);
         }
     }
 
     @GetMapping(value = "route")
     public ModelAndView route() {
-        return new ModelAndView("route", "command", new Call());
+        Call defaultCall = new Call();
+
+        //При создании даты возникают проблемы, поэтому здесь устанавливаем её дефолтное значение (костыль)
+        Date dateNow = new Date();
+        SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd");
+        defaultCall.setDate(java.sql.Date.valueOf(formatForDateNow.format(dateNow)));
+        return new ModelAndView("route", "command", defaultCall);
     }
 
     @PostMapping(value = "/route")
@@ -174,13 +180,29 @@ public class ClassController {
             client = clients.get(i);
             message = message + "<tr><td align=\"center\">" + client.getId() + "</td><td align=\"center\">" + client.getLogin() + "</td><td align=\"center\">" +
                     client.getPassword() + "</td><td align=\"center\">" + client.getName() + "</td><td nowrap align=\"center\">" + client.getBirthday() + "</td><td align=\"center\">" +
-                    client.getPhoneNumber() + "</td><td align=\"center\">" + client.getPriorityLevel() + "</td><td align=\"center\"><input id=\"status\" type=\"checkbox\"></td></tr>\n";
+                    client.getPhoneNumber() + "</td><td align=\"center\">" + client.getPriorityLevel() + "</td><td align=\"center\"><input id=\"status" + i + "\" type=\"checkbox\"></td></tr>\n";
         }
         model.addAttribute("tableData", message);
         return new ModelAndView("userAdministrationSuperUser");
     }
 
-    @GetMapping(value = "callAdministration")
+    @GetMapping(value = "userAdministrationModerator")
+    public ModelAndView userAdministrationModerator(ModelMap model) throws SQLException {
+        String message = "<tr><td align=\"center\">ID</td><td align=\"center\">Login</td><td align=\"center\">Password</td><td align=\"center\">Name</td>" +
+                "<td align=\"center\">Birthday</td><td>PhoneNumber</td><td nowrap align=\"center\">Priority Level</td></tr>";
+        Client client;
+        List<Client> clients = clientDao.getAll();
+        for (int i = 0; i < clients.size(); i++) {
+            client = clients.get(i);
+            message = message + "<tr><td align=\"center\">" + client.getId() + "</td><td align=\"center\">" + client.getLogin() + "</td><td align=\"center\">" +
+                    client.getPassword() + "</td><td align=\"center\">" + client.getName() + "</td><td nowrap align=\"center\">" + client.getBirthday() + "</td><td align=\"center\">" +
+                    client.getPhoneNumber() + "</td><td align=\"center\">" + client.getPriorityLevel() + "</td></tr>\n";
+        }
+        model.addAttribute("tableData", message);
+        return new ModelAndView("userAdministrationModerator");
+    }
+
+    @GetMapping(value = "callAdministrationSuperUser")
     public ModelAndView callAdministration(ModelMap model) throws SQLException {
         String message = "<tr><td align=\"center\">ID</td><td align=\"center\">Date</td><td nowrap align=\"center\">Client ID</td><td align=\"center\">Taxi</td>" +
                 "<td align=\"center\">Start Point</td><td align=\"center\">Destination</td><td nowrap align=\"center\">Payment</td><td align=\"center\">Status</td></tr>";
@@ -193,10 +215,25 @@ public class ClassController {
                     call.getDestination() + "</td><td align=\"center\">" + call.getPayment() + "</td><td align=\"center\"><input id=\"status\" type=\"checkbox\"></td></tr>\n";
         }
         model.addAttribute("tableData", message);
-        return new ModelAndView("callAdministration");
+        return new ModelAndView("callAdministrationSuperUser");
     }
 
-    @GetMapping(value = "taxiAdministration")
+    @GetMapping(value = "taxiAdministrationModerator")
+    public ModelAndView taxiAdministrationModerator(ModelMap model) throws SQLException {
+        String message = "<tr><td align=\"center\">ID</td><td nowrap align=\"center\">Driver Name</td>" +
+                "<td nowrap align=\"center\">Car Number</td><td nowrap align=\"center\">Car Model</td><td align=\"center\">Status</td></tr>";
+        Taxi taxi;
+        List<Taxi> taxis = taxiDao.getAll();
+        for (int i = 0; i < taxis.size(); i++) {
+            taxi = taxis.get(i);
+            message = message + "<tr><td align=\"center\">" + taxi.getId() + "</td><td nowrap align=\"center\">" + taxi.getDriverName() + "</td><td align=\"center\">" +
+                    taxi.getCarNumber() + "</td><td nowrap align=\"center\">" + taxi.getCarModel() + "</td><td align=\"center\"><input id=\"status\" type=\"checkbox\"></td></tr>\n";
+        }
+        model.addAttribute("tableData", message);
+        return new ModelAndView("taxiAdministrationModerator");
+    }
+
+    @GetMapping(value = "taxiAdministrationSuperUser")
     public ModelAndView taxiAdministration(ModelMap model) throws SQLException {
         String message = "<tr><td align=\"center\">ID</td><td nowrap align=\"center\">Driver Name</td>" +
                 "<td nowrap align=\"center\">Car Number</td><td nowrap align=\"center\">Car Model</td><td align=\"center\">Status</td></tr>";
@@ -208,12 +245,134 @@ public class ClassController {
                     taxi.getCarNumber() + "</td><td nowrap align=\"center\">" + taxi.getCarModel() + "</td><td align=\"center\"><input id=\"status\" type=\"checkbox\"></td></tr>\n";
         }
         model.addAttribute("tableData", message);
-        return new ModelAndView("taxiAdministration");
+        return new ModelAndView("taxiAdministrationSuperUser");
+    }
+
+    @GetMapping(value = "personalAreaModerator")
+    public ModelAndView personalAreaModerator(ModelMap model) throws SQLException {
+        return new ModelAndView("personalAreaModerator");
     }
 
     @GetMapping(value = "personalAreaSuperUser")
     public ModelAndView personalAreaSuperUser(ModelMap model) throws SQLException {
         return new ModelAndView("personalAreaSuperUser");
+    }
+
+    @PostMapping(value = "/userDelete")
+    public ModelAndView userDelete(@ModelAttribute("dispatcher") Client client, ModelMap model) throws Exception {
+
+        String message = "<tr><td align=\"center\">ID</td><td align=\"center\">Login</td><td align=\"center\">Password</td><td align=\"center\">Name</td>" +
+                "<td align=\"center\">Birthday</td><td>PhoneNumber</td><td nowrap align=\"center\">Priority Level</td><td align=\"center\">Status</td></tr>";
+        List<Client> clients = clientDao.getAll();
+        for (int i = 0; i < clients.size(); i++) {
+            client = clients.get(i);
+            message = message + "<tr><td align=\"center\">" + client.getId() + "</td><td align=\"center\">" + client.getLogin() + "</td><td align=\"center\">" +
+                    client.getPassword() + "</td><td align=\"center\">" + client.getName() + "</td><td nowrap align=\"center\">" + client.getBirthday() + "</td><td align=\"center\">" +
+                    client.getPhoneNumber() + "</td><td align=\"center\">" + client.getPriorityLevel() + "</td><td align=\"center\"><input id=\"status" + i + "\" type=\"checkbox\"></td></tr>\n";
+        }
+        model.addAttribute("tableData", message);
+        return new ModelAndView("userAdministrationSuperUser");
+    }
+
+    @PostMapping(value = "/callDelete")
+    public ModelAndView callDelete(@ModelAttribute("dispatcher") Call call, ModelMap model) throws Exception {
+
+        String message = "<tr><td align=\"center\">ID</td><td align=\"center\">Date</td><td nowrap align=\"center\">Client ID</td><td align=\"center\">Taxi</td>" +
+                "<td align=\"center\">Start Point</td><td align=\"center\">Destination</td><td nowrap align=\"center\">Payment</td><td align=\"center\">Status</td></tr>";
+        List<Call> calls = callDao.getAll();
+        for (int i = 0; i < calls.size(); i++) {
+            call = calls.get(i);
+            message = message + "<tr><td align=\"center\">" + call.getId() + "</td><td nowrap align=\"center\">" + call.getDate() + "</td><td align=\"center\">" +
+                    call.getClientID() + "</td><td align=\"center\">" + call.getTaxiID() + "</td><td nowrap align=\"center\">" + call.getStartPoint() + "</td><td nowrap align=\"center\">" +
+                    call.getDestination() + "</td><td align=\"center\">" + call.getPayment() + "</td><td align=\"center\"><input id=\"status\" type=\"checkbox\"></td></tr>\n";
+        }
+        model.addAttribute("tableData", message);
+        return new ModelAndView("callAdministrationSuperUser");
+    }
+
+    @PostMapping(value = "/taxiDelete")
+    public ModelAndView taxiDelete(@ModelAttribute("dispatcher") Taxi taxi, ModelMap model) throws Exception {
+
+        String message = "<tr><td align=\"center\">ID</td><td nowrap align=\"center\">Driver Name</td>" +
+                "<td nowrap align=\"center\">Car Number</td><td nowrap align=\"center\">Car Model</td><td align=\"center\">Status</td></tr>";
+        List<Taxi> taxis = taxiDao.getAll();
+        for (int i = 0; i < taxis.size(); i++) {
+            taxi = taxis.get(i);
+            message = message + "<tr><td align=\"center\">" + taxi.getId() + "</td><td nowrap align=\"center\">" + taxi.getDriverName() + "</td><td align=\"center\">" +
+                    taxi.getCarNumber() + "</td><td nowrap align=\"center\">" + taxi.getCarModel() + "</td><td align=\"center\"><input id=\"status\" type=\"checkbox\"></td></tr>\n";
+        }
+        model.addAttribute("tableData", message);
+        return new ModelAndView("taxiAdministrationSuperUser");
+    }
+
+    @GetMapping(value = "userRegistrationSuperUser")
+    public ModelAndView userRegistrationSuperUser(ModelMap model) throws SQLException {
+        Client defaultClient = new Client();
+
+        //При создании даты возникают проблемы, поэтому здесь устанавливаем её дефолтное значение (костыль)
+        Date dateNow = new Date();
+        SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd");
+        defaultClient.setBirthday(java.sql.Date.valueOf(formatForDateNow.format(dateNow)));
+        return new ModelAndView("userRegistrationSuperUser", "command", defaultClient);
+    }
+
+    @PostMapping(value = "/userRegistrationSuperUser")
+    public ModelAndView userRegistrationSuperUser(@ModelAttribute("dispatcher") Client client, ModelMap model) throws Exception {
+        Client newClient;
+        newClient = clientDao.getByLogin(client.getLogin());
+        if (newClient == null && client.getLogin() != null && client.getPassword() != null) {
+
+            clientDao.create(client.getLogin(), client.getPassword(), client.getName(), client.getBirthday(), client.getPhoneNumber(), client.getPriorityLevel());
+            //Задаём дефолтное имя, если его не ввели
+            newClient = clientDao.getByLogin(client.getLogin());
+            if (newClient.getName() == null) {
+                clientDao.update(newClient.getId(), newClient.getLogin(), newClient.getPassword(), "Unknown", newClient.getBirthday(), newClient.getPhoneNumber(), newClient.getPriorityLevel());
+            }
+
+            String message = "<tr><td align=\"center\">ID</td><td align=\"center\">Login</td><td align=\"center\">Password</td><td align=\"center\">Name</td>" +
+                    "<td align=\"center\">Birthday</td><td>PhoneNumber</td><td nowrap align=\"center\">Priority Level</td><td align=\"center\">Status</td></tr>";
+            List<Client> clients = clientDao.getAll();
+            for (int i = 0; i < clients.size(); i++) {
+                client = clients.get(i);
+                message = message + "<tr><td align=\"center\">" + client.getId() + "</td><td align=\"center\">" + client.getLogin() + "</td><td align=\"center\">" +
+                        client.getPassword() + "</td><td align=\"center\">" + client.getName() + "</td><td nowrap align=\"center\">" + client.getBirthday() + "</td><td align=\"center\">" +
+                        client.getPhoneNumber() + "</td><td align=\"center\">" + client.getPriorityLevel() + "</td><td align=\"center\"><input id=\"status" + i + "\" type=\"checkbox\"></td></tr>\n";
+            }
+            model.addAttribute("tableData", message);
+            return new ModelAndView("userAdministrationSuperUser");
+        } else {
+            System.out.println("Something is Wrong!");
+            return new ModelAndView("userRegistrationSuperUser", "command", new Client());
+        }
+    }
+
+    @GetMapping(value = "taxiRegistrationSuperUser")
+    public ModelAndView taxiRegistrationSuperUser(ModelMap model) throws SQLException {
+        return new ModelAndView("taxiRegistrationSuperUser", "command", new Taxi());
+    }
+
+    @PostMapping(value = "/taxiRegistrationSuperUser")
+    public ModelAndView taxiRegistrationSuperUser(@ModelAttribute("dispatcher") Taxi taxi, ModelMap model) throws Exception {
+        Taxi newTaxi;
+        newTaxi = taxiDao.getByCarNumber(taxi.getCarNumber());
+        if (newTaxi == null && taxi.getDriverName() != null && taxi.getCarNumber() != null && taxi.getCarModel() != null) {
+
+            taxiDao.create(taxi.getDriverName(), taxi.getCarNumber(), taxi.getCarModel());
+
+            String message = "<tr><td align=\"center\">ID</td><td nowrap align=\"center\">Driver Name</td>" +
+                    "<td nowrap align=\"center\">Car Number</td><td nowrap align=\"center\">Car Model</td><td align=\"center\">Status</td></tr>";
+            List<Taxi> taxis = taxiDao.getAll();
+            for (int i = 0; i < taxis.size(); i++) {
+                taxi = taxis.get(i);
+                message = message + "<tr><td align=\"center\">" + taxi.getId() + "</td><td nowrap align=\"center\">" + taxi.getDriverName() + "</td><td align=\"center\">" +
+                        taxi.getCarNumber() + "</td><td nowrap align=\"center\">" + taxi.getCarModel() + "</td><td align=\"center\"><input id=\"status\" type=\"checkbox\"></td></tr>\n";
+            }
+            model.addAttribute("tableData", message);
+            return new ModelAndView("taxiAdministrationSuperUser");
+        } else {
+            System.out.println("Something is Wrong!");
+            return new ModelAndView("taxiRegistrationSuperUser", "command", new Taxi());
+        }
     }
 
     public String UpdateTrainHistory(Client currentClient) throws Exception

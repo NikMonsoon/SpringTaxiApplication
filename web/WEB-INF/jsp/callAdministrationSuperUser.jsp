@@ -17,14 +17,13 @@
     <form:form action="callAdministration">
         <table align="center">
             <tr>
-                <td colspan="3"><table border="1">
+                <td colspan="2"><table border="1">
                         ${tableData}
                 </table></td>
             </tr>
             <tr>
                 <td align="center"><button type="submit" formmethod="get" formaction="personalAreaSuperUser" style="width: 150px"/>Back</td>
-                <td align="center"><button type="submit" formmethod="get" formaction="callDelete" style="width: 150px"/>Delete Call</td>
-                <td align="center"><button type="submit" formmethod="get" formaction="callAdd" style="width: 150px"/>Add Call</td>
+                <td align="center"><button type="submit" formmethod="post" formaction="callDelete" style="width: 150px"/>Delete Call</td>
             </tr>
         </table>
     </form:form>

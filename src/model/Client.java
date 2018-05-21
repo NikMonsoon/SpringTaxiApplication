@@ -12,6 +12,9 @@ public class Client {
     private long phoneNumber;
     private int priorityLevel;
 
+    //Параметр используется в момент удаления записи суперпользователем (костыль)
+    private boolean status;
+
     public Client() {
         this.id = id;
         this.login = login;
@@ -20,6 +23,7 @@ public class Client {
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
         this.priorityLevel = priorityLevel;
+        this.status = status;
     }
 
     public int getId() {
@@ -76,5 +80,13 @@ public class Client {
 
     public void setPriorityLevel(int priorityLevel) {
         this.priorityLevel = priorityLevel;
+    }
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

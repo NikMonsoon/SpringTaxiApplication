@@ -60,4 +60,14 @@
         <url-pattern>/taxiAdministrationSuperUser.jsp</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/userRegistrationSuperUser.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/taxiRegistrationSuperUser.jsp</url-pattern>
+    </servlet-mapping>
+
 </web-app>

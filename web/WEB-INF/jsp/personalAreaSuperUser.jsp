@@ -19,8 +19,8 @@
                 <tr>
                     <td align="center"><button type="submit" formmethod="get" formaction="logging" style="width: 150px"/>Exit Profile</td>
                     <td align="center"><button type="submit" formmethod="get" formaction="userAdministrationSuperUser" style="width: 150px"/>Users Info</td>
-                    <td align="center"><button type="submit" formmethod="get" formaction="taxiAdministration" style="width: 150px"/>Taxi Info</td>
-                    <td align="center"><button type="submit" formmethod="get" formaction="callAdministration" style="width: 150px"/>Calls Info</td>
+                    <td align="center"><button type="submit" formmethod="get" formaction="taxiAdministrationSuperUser" style="width: 150px"/>Taxi Info</td>
+                    <td align="center"><button type="submit" formmethod="get" formaction="callAdministrationSuperUser" style="width: 150px"/>Calls Info</td>
                 </tr>
             </table>
         </form:form>

@@ -20,9 +20,9 @@
                 ${tableData}
         </table></td>
         <tr>
-            <td align="center"><button type="submit" formmethod="get" formaction="personalAreaSuperUser" style="width: 150px"/>Back</td>
-            <td align="center"><button type="submit" formmethod="post" formaction="userDelete" style="width: 150px"/>Delete User</td>
-            <td align="center"><button type="submit" formmethod="get" formaction="userRegistrationSuperUser" style="width: 150px"/>Add User</td>
+            <td align="center"><button type="submit" formmethod="get" formaction="personalAreaModerator" style="width: 150px"/>Back</td>
+            <td align="center"><button type="submit" formmethod="post" formaction="taxiDelete" style="width: 150px"/>Delete Car</td>
+            <td align="center"><button type="submit" formmethod="get" formaction="taxiRegistrationModerator" style="width: 150px"/>Add Car</td>
     </table>
 </form:form>
 </body>
